@@ -7,16 +7,16 @@
         }
     </style>
     <br >
-    <div class="container-xl">
+    <div class="container">
       <div class="row">
         <div class="col">
             <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 20rem;height: 420px">
               <div class="card-body">
                 <img class="card-img-top" src="{{ url_for("static",filename="img/logo01.jpg") }}">
                 <h5 class="card-title">蜜雪冰城（福雷德广场店）</h5>
-                <h6 class="card-subtitle mb-2 text-muted">营业时间：08:30-00:00</h6>
+                <h6 class="card-subtitle mb-2 text-muted">营业时间：08:00-23:00</h6>
                 <p class="card-text">地址：浙江省杭州市钱塘区贤德巷B29-1号</p>
-                <p class="card-text">员工人数：7</p>
+                <p class="card-text">班次：早班8:00-13:00 ｜ 下午班13:00-18:00 ｜ 晚班18:00-23:00</p>
               </div>
             </div>
         </div>
@@ -55,52 +55,76 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <div id="amount" style="width: 600px;height:400px;" class="shadow p-2 mb-3 bg-white rounded"></div>
+                <div id="amount" style="width: 900px;height:400px;" class="shadow p-2 mb-3 bg-white rounded">
+                    <h4 class="text-muted" style="margin-left: 350px;margin-top: 125px">查看客流量</h4>
+                    <h4 class="text-muted" style="margin-left: 300px;">请点击左侧生成按钮</h4>
+                </div>
             </div>
             <div class="col">
-            <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 30rem;height: 400px">
+            <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 11rem;height: 400px">
               <div class="card-body">
-                <h5 class="card-title"></h5>
-                <h6 class="card-subtitle mb-2 text-muted"></h6>
-                <form>
-                    <input type="text" name="num_search">
-                </form>
+                <h5 class="card-title">门店客流量</h5>
+                <h6 class="card-subtitle mb-2 text-muted">根据输入的周数查看一周客流量数据</h6>
+{#                <form>#}
+{#                    <input type="text" name="num_search">#}
+{#                </form>#}
+                  <a class="graph btn-link" >生成</a>
               </div>
             </div>
         </div>
         </div>
     </div>
     <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('amount'));
+        $('.graph').click(function (){
+            var _this=$(this)
+            $.ajax({
+                url:'{{url_for('front.graph')}}',
+                type:'GET',
+                success: function (result, status){
+                    console.log(status + '----' + result)
+                let data_morning = result.data_morning
+                let data_afternoon = result.data_afternoon
+                let data_evening = result.data_evening
 
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                text: '门店客流量'
-            },
-            tooltip: {},
-            legend: {
-                data_morning:['上午客流量'],
-                data_afternoon:['下午客流量']
-            },
-            xAxis: {
-                data: ["周一","周二","周三","周四","周五","周六","周日"]
-            },
-            yAxis: {},
-            series: [{
-                name: '早上客流量',
-                type: 'line',
-                data: [5, 20, 36, 10, 10, 20,10]
-            },
-            {
-                name: '下午客流量',
-                type: 'line',
-                data: [7, 21, 16, 10, 10, 20,20]
-            }]
-        };
+                var myChart = echarts.init(document.getElementById('amount'));
 
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: '门店客流量'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data_morning: ['上午客流量'],
+                        data_afternoon: ['下午客流量']
+                    },
+                    xAxis: {
+                        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+                    },
+                    yAxis: {},
+                    series:
+                    [{
+                        name: '早上客流量',
+                        type: 'bar',
+                        data: data_morning
+                    },
+                    {
+                            name: '下午客流量',
+                            type: 'bar',
+                            data: data_afternoon
+                    },
+                    {
+                            name: '晚上客流量',
+                            type: 'bar',
+                            data: data_evening
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+                    }
+            })
+        })
     </script>
+
 {% endblock %}

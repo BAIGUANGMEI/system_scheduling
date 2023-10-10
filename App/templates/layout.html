@@ -27,17 +27,17 @@
                     <div class="dropdown" >
                       <button class="btn btn-primary dropdown-toggle " type="button" data-toggle="dropdown" aria-expanded="false">
                         {% if flag == True %}
-                            欢迎您，{{ username }}
+                            欢迎您，{{ user.username }}
                         {% else %}
                             请先登陆
                         {% endif %}
                       </button>
                       <div class="dropdown-menu">
                         {% if flag == True %}
-                            <a class="dropdown-item" href="#">退出(logout)</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.logout') }}">退出(logout)</a>
                         {% else %}
-                            <a class="dropdown-item" href="#">登陆(login)</a>
-                            <a class="dropdown-item" href="#">注册(register)</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.login') }}">登陆(login)</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.register') }}">注册(register)</a>
                         {% endif %}
                       </div>
                     </div>
@@ -80,6 +80,10 @@
     <script src="{{ url_for("static",filename="js/echarts.js") }}"></script>
     <script>
         $('.dropdown-toggle').dropdown()
+
+        $('#myModal').on('shown.bs.modal', function () {
+          $('#myInput').trigger('focus')
+        })
     </script>
 
     {% block content%}
