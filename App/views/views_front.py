@@ -26,6 +26,15 @@ def introduction():
     user = User.query.filter_by(id=user_id).first()
     return render_template('front/front_introduction.html', flag=flag, user=user)
 
+@front.route('/schedulesystem/about/', methods=['GET', 'POST'])
+def about():
+    flag = False
+    if session.get('user_id'):
+        flag = True
+    user_id = session.get('user_id')
+    user = User.query.filter_by(id=user_id).first()
+    return render_template('front/front_about.html', flag=flag, user=user)
+
 # 门店信息界面客流量数据接口
 @front.route('/schedulesystem/introduction/graph/', methods=['GET'])
 def graph():

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container"style="margin-top: 20px">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 400px">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <h4 class="text-center">版本说明
+                        <a href="https://github.com/BAIGUANGMEI/schedulesystem" target="_blank" >
+                            <img style="width: 20px" src="{{ url_for('static',filename='img/github.png') }}">
+                        </a>
+                </h4>
+            </li>
+            <li class="list-group-item">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">版本名</th>
+                      <th scope="col">更新内容</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>init_v1.1</td>
+                      <td>支持用户登陆和注册，添加了门店信息，支持显示门店客流量。加入了打赏作者的功能。</td>
+                    </tr>
+                    <tr>
+                      <td>init_v1.0</td>
+                      <td>创建了前后端基本框架，添加了前端模版，首页。</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </li>
+
+        </ul>
+    </div>
+</div>
+{% endblock %}
