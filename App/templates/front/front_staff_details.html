@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>员工详情</title>
+  <link rel="stylesheet" href="{{ url_for('static' ,filename='css/bootstrap.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h4>
+            员工详情
+        </h4>
+        <p>
+            姓名：{{ staff.name }}
+        </p>
+        <p>
+            性别：{{ staff.gender }}
+        </p>
+        <p>
+            年龄：{{ 2023  - staff.birthyear }}
+        </p>
+        <p>
+            喜欢的工作日:
+            {% for i in staff.daylike  %}
+                {% if i in ['1','2','3','4','5','6','7'] %}
+                    {% if i == '1' %}
+                        星期一
+                    {% elif i == '2' %}
+                        星期二
+                    {% elif i == '3' %}
+                        星期三
+                    {% elif i == '4' %}
+                        星期四
+                    {% elif i == '5' %}
+                        星期五
+                    {% elif i == '6' %}
+                        星期六
+                    {% elif i == '7' %}
+                        星期日
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </p>
+        <form method="post">
+            <button type="submit" class="btn btn-primary" >返回</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

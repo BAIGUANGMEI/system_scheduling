@@ -26,6 +26,25 @@ def introduction():
     user = User.query.filter_by(id=user_id).first()
     return render_template('front/front_introduction.html', flag=flag, user=user)
 
+@front.route('/schedulesystem/staff/', methods=['GET', 'POST'])
+def staff():
+    flag = False
+    if session.get('user_id'):
+        flag = True
+    user_id = session.get('user_id')
+    user = User.query.filter_by(id=user_id).first()
+    staffs = Staff.query.all()
+    return render_template('front/front_staff.html', flag=flag, user=user, staffs=staffs)
+
+@front.route('/schedulesystem/staff/detail', methods=['GET', 'POST'])
+def staff_detail():
+    if request.method=="GET":
+        staff_id= request.args.get('sid')
+        staff = Staff.query.filter_by(id=staff_id).first()
+        return render_template('front/front_staff_details.html', staff=staff)
+    else:
+        return redirect('/schedulesystem/staff/')
+
 @front.route('/schedulesystem/about/', methods=['GET', 'POST'])
 def about():
     flag = False
