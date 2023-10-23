@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<button type="button" class="btn btn-outline-success" id="schedule" >一键排班</button>
+<button class="btn btn-primary" type="button" disabled style="display: None" id="load">
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"  ></span>
+  Loading
+</button>
+<table class="table" style="">
+  <thead>
+    <tr>
+      <th scope="col">班次</th>
+        <th scope="col">周一</th>
+        <th scope="col">周二</th>
+        <th scope="col">周三</th>
+        <th scope="col">周四</th>
+        <th scope="col">周五</th>
+        <th scope="col">周六</th>
+        <th scope="col">周日</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">早班</th>
+        <td id="11">{{ schedule.day1time1 }}</td>
+        <td id="21">{{ schedule.day2time1 }}</td>
+        <td id="31">{{ schedule.day3time1 }}</td>
+        <td id="41">{{ schedule.day4time1 }}</td>
+        <td id="51">{{ schedule.day5time1 }}</td>
+        <td id="61">{{ schedule.day6time1 }}</td>
+        <td id="71">{{ schedule.day7time1 }}</td>
+
+    </tr>
+    <tr>
+        <th scope="row">中班</th>
+        <td id="12">{{ schedule.day1time2 }}</td>
+        <td id="22">{{ schedule.day2time2 }}</td>
+        <td id="32">{{ schedule.day3time2 }}</td>
+        <td id="42">{{ schedule.day4time2 }}</td>
+        <td id="52">{{ schedule.day5time2 }}</td>
+        <td id="62">{{ schedule.day6time2 }}</td>
+        <td id="72">{{ schedule.day7time2 }}</td>
+    </tr>
+    <tr>
+      <th scope="row">晚班</th>
+        <td id="13">{{ schedule.day1time3 }}</td>
+        <td id="23">{{ schedule.day2time3 }}</td>
+        <td id="33">{{ schedule.day3time3 }}</td>
+        <td id="43">{{ schedule.day4time3 }}</td>
+        <td id="53">{{ schedule.day5time3 }}</td>
+        <td id="63">{{ schedule.day6time3 }}</td>
+        <td id="73">{{ schedule.day7time3 }}</td>
+    </tr>
+  </tbody>
+</table>
+<script>
+    $('#schedule').click(function (){
+            var _this=$(this)
+            _this.css('display','None')
+            $('#load').css('display','')
+            $.ajax({
+                url: '{{url_for('front.schedule_daily')}}',
+                type: 'GET',
+                success: function (result, status) {
+                    $('#load').css('display','None')
+                    _this.css('display','')
+                    console.log(status + '----' + result)
+                    let day1time1 = result.day1time1
+                    let day1time2 = result.day1time2
+                    let day1time3 = result.day1time3
+                    let day2time1 = result.day2time1
+                    let day2time2 = result.day2time2
+                    let day2time3 = result.day2time3
+                    let day3time1 = result.day3time1
+                    let day3time2 = result.day3time2
+                    let day3time3 = result.day3time3
+                    let day4time1 = result.day4time1
+                    let day4time2 = result.day4time2
+                    let day4time3 = result.day4time3
+                    let day5time1 = result.day5time1
+                    let day5time2 = result.day5time2
+                    let day5time3 = result.day5time3
+                    let day6time1 = result.day6time1
+                    let day6time2 = result.day6time2
+                    let day6time3 = result.day6time3
+                    let day7time1 = result.day7time1
+                    let day7time2 = result.day7time2
+                    let day7time3 = result.day7time3
+                    $('#11').text(day1time1)
+                    $('#12').text(day1time2)
+                    $('#13').text(day1time3)
+                    $('#21').text(day2time1)
+                    $('#22').text(day2time2)
+                    $('#23').text(day2time3)
+                    $('#31').text(day3time1)
+                    $('#32').text(day3time2)
+                    $('#33').text(day3time3)
+                    $('#41').text(day4time1)
+                    $('#42').text(day4time2)
+                    $('#43').text(day4time3)
+                    $('#51').text(day5time1)
+                    $('#52').text(day5time2)
+                    $('#53').text(day5time3)
+                    $('#61').text(day6time1)
+                    $('#62').text(day6time2)
+                    $('#63').text(day6time3)
+                    $('#71').text(day7time1)
+                    $('#72').text(day7time2)
+                    $('#73').text(day7time3)
+
+                }
+                })
+            })
+</script>
+
+{% endblock %}

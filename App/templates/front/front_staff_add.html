@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加员工</title>
+    <link rel="stylesheet" href="{{ url_for('static' ,filename='css/bootstrap.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <form method="post">
+                <input type="text" placeholder="请输入员工姓名" name="staffname">
+                <input type="radio" name="staffgender" value="男">男
+                <input type="radio" name="staffgender" value="女">女
+                <input type="text" placeholder="请输入员工出生年份" name="staffbirthyear">
+                <input type="text" placeholder="请输入员工入职年份" name="staffworkyear">
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

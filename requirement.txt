@@ -1,0 +1,8 @@
+flask
+flask-migrate
+flask-sqlalchemy
+pymysql
+numpy
+pandas
+matplotlib
+openpyxl
