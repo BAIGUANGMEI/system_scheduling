@@ -52,14 +52,22 @@ def schedule():
                     'day6time1', 'day6time2', 'day6time3',
                     'day7time1', 'day7time2', 'day7time3']
     final_schedule = {}
-    for i in range(len(timelist)):
-        list = ''
-        example=getattr(schedule,timelist[i])
-        for j in range(len(example)):
-            if '0' <= example[j] <= '9':
+    try:
+        for i in range(len(timelist)):
+            list = []
+            example=getattr(schedule,timelist[i])
+            example=example.replace('[','')
+            example=example.replace(']','')
+            example=example.split(',')
+            # print(example)
+            for j in range(len(example)):
                 staff = Staff.query.filter_by(id=int(example[j]) + 1).first()
-                list+=staff.name+' '
-        final_schedule[timelist2[i]] = list
+                list.append(staff.name)
+            final_schedule[timelist2[i]] = str(list).replace('[','').replace(']','').replace('\'','')
+
+    except Exception as e:
+        print(e)
+        final_schedule = {}
     return render_template('front/front_scheduledaily.html', flag=flag, user=user, schedule=final_schedule)
 
 
@@ -113,22 +121,33 @@ def about():
     user = User.query.filter_by(id=user_id).first()
     return render_template('front/front_about.html', flag=flag, user=user)
 
-
 # 门店信息界面客流量数据接口
 @front.route('/schedulesystem/introduction/graph/', methods=['GET'])
 def graph():
-    return {'code': 200, 'data_morning': [5, 20, 36, 10, 10, 20, 10],
-            'data_afternoon': [7, 21, 16, 10, 10, 20, 20],
-            'data_evening': [46, 30, 36, 45, 25, 70, 33]}
+
+    customer_flow = Customer_flow.query.order_by(Customer_flow.week.desc()).first()
+    timelist = ['d1_morning', 'd1_afternoon', 'd1_evening',
+                'd2_morning', 'd2_afternoon', 'd2_evening',
+                'd3_morning','d3_afternoon', 'd3_evening',
+                'd4_morning', 'd4_afternoon', 'd4_evening',
+                'd5_morning', 'd5_afternoon','d5_evening',
+                'd6_morning', 'd6_afternoon', 'd6_evening',
+                'd7_morning', 'd7_afternoon', 'd7_evening']
+    list = []
+    for i in range(len(timelist)):
+        example=getattr(customer_flow,timelist[i])
+        list.append(int(example))
+
+    return {'code': 200, 'data_morning': list[0:7],
+            'data_afternoon': list[7:14],
+            'data_evening': list[14:21]}
 
 
 # 门店排班信息接口（按周查看）
 @front.route('/schedulesystem/schedule/daily/', methods=['GET', 'POST'])
 def schedule_daily():
-    ans = calculate('/Users/baiguang/PycharmProjects/ScheduleSystem/App/Algorithm/data.xlsx',
-                    '/Users/baiguang/PycharmProjects/ScheduleSystem/App/Algorithm/data2.xlsx')
+    ans = calculate()
     schedule = transform_day(ans)
-    print(schedule)
     sche = History(d1_morning=str(schedule['day1time1']), d1_afternoon=str(schedule['day1time2']),d1_evening=str(schedule['day1time3']),
                     d2_morning=str(schedule['day2time1']), d2_afternoon=str(schedule['day2time2']),d2_evening=str(schedule['day2time3']),
                     d3_morning=str(schedule['day3time1']), d3_afternoon=str(schedule['day3time2']),d3_evening=str(schedule['day3time3']),
@@ -157,9 +176,12 @@ def schedule_daily():
     for i in range(len(timelist)):
         list = []
         example=getattr(schedule,timelist[i])
+        example=example.replace('[','')
+        example=example.replace(']','')
+        example=example.split(',')
+        # print(example)
         for j in range(len(example)):
-            if '0' <= example[j] <= '9':
-                staff = Staff.query.filter_by(id=int(example[j]) + 1).first()
-                list.append(staff.name)
+            staff = Staff.query.filter_by(id=int(example[j]) + 1).first()
+            list.append(staff.name)
         final_schedule[timelist2[i]] = list
     return final_schedule
