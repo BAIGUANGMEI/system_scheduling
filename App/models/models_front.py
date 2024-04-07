@@ -64,6 +64,7 @@ class History(db.Model):
     d7_morning = db.Column(db.String(128),nullable=True)
     d7_afternoon = db.Column(db.String(128),nullable=True)
     d7_evening = db.Column(db.String(128),nullable=True)
+    change = db.Column(db.String(128),nullable=True)
     time = db.Column(db.DateTime,nullable=True,default=datetime.now)
 
 class Customer_flow(db.Model):
@@ -92,3 +93,11 @@ class Customer_flow(db.Model):
     d7_afternoon = db.Column(db.Integer,nullable=True)
     d7_evening = db.Column(db.Integer,nullable=True)
     week = db.Column(db.Integer,nullable=True)
+
+class Staff_request(db.Model):
+    __tablename__ = 'staff_request'
+
+    id = db.Column(db.Integer,primary_key=True, autoincrement=True)
+    staff_id = db.Column(db.Integer,nullable=False)
+    staff_name = db.Column(db.String(128),nullable=False)
+    request = db.Column(db.String(512),nullable=False)

@@ -21,7 +21,7 @@
             年龄：{{ 2023  - staff.birthyear }}
         </p>
         <p>
-            喜欢的工作日:
+            喜欢的工作日：
             {% if staff.daylike == None %}
                         无
             {% else %}
@@ -43,6 +43,22 @@
                             星期日
                         {% endif %}
                     {% endif %}
+                {% endfor %}
+            {% endif %}
+        </p>
+        <p>
+            喜欢的工作班次：
+            {% if staff.timelike == None %}
+                    无
+            {% else %}
+                {% for i in staff.timelike %}
+                        {% if i == '0' %}
+                            早班
+                        {% elif i == '1' %}
+                            午班
+                        {% elif i == '2' %}
+                            晚班
+                        {% endif %}
                 {% endfor %}
             {% endif %}
         </p>

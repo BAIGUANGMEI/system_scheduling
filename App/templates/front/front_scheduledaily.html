@@ -1,58 +1,86 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<button type="button" class="btn btn-outline-success" id="schedule" >一键排班</button>
-<button class="btn btn-primary" type="button" disabled style="display: None" id="load">
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"  ></span>
-  Loading
-</button>
-<table class="table" style="">
-  <thead>
-    <tr>
-      <th scope="col">班次</th>
-        <th scope="col">周一</th>
-        <th scope="col">周二</th>
-        <th scope="col">周三</th>
-        <th scope="col">周四</th>
-        <th scope="col">周五</th>
-        <th scope="col">周六</th>
-        <th scope="col">周日</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">早班</th>
-        <td id="11">{{ schedule.day1time1 }}</td>
-        <td id="21">{{ schedule.day2time1 }}</td>
-        <td id="31">{{ schedule.day3time1 }}</td>
-        <td id="41">{{ schedule.day4time1 }}</td>
-        <td id="51">{{ schedule.day5time1 }}</td>
-        <td id="61">{{ schedule.day6time1 }}</td>
-        <td id="71">{{ schedule.day7time1 }}</td>
+<div class="tableSchedule">
+    <div class="textTop">
+        <h1 class="display-5 text-center">按周查看排班</h1>
+    </div>
+    <div class="buttonTop">
+        <button type="button" class="btn btn-outline-success" id="schedule" >一键排班</button>
+        <button class="btn btn-primary" type="button" disabled style="display: None" id="load">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"  ></span>
+          Loading
+        </button>
+    </div>
+    <div class="tableContent">
+        <table class="table table-hover" style="">
+          <thead>
+            <tr>
+              <th scope="col">班次</th>
+                <th scope="col">周一</th>
+                <th scope="col">周二</th>
+                <th scope="col">周三</th>
+                <th scope="col">周四</th>
+                <th scope="col">周五</th>
+                <th scope="col">周六</th>
+                <th scope="col">周日</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table_row">
+              <th scope="row" ><svg t="1712046427778" class="icon" viewBox="0 0 1204 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8292" width="20" height="20"><path d="M1176.696471 808.297412H28.009412a27.105882 27.105882 0 0 1-27.346824-26.985412v-53.850353a27.105882 27.105882 0 0 1 27.346824-26.925176H224.075294a349.364706 349.364706 0 0 1-4.638118-53.850353c0-208.233412 171.429647-377.072941 382.915765-377.072942 211.425882 0 382.915765 168.839529 382.915765 377.072942a349.364706 349.364706 0 0 1-4.638118 53.850353h196.065883c15.058824 0 27.346824 12.047059 27.346823 26.925176v53.850353a27.105882 27.105882 0 0 1-27.346823 26.985412zM602.352941 377.313882c-151.070118 0-273.468235 120.591059-273.468235 269.372236 0 18.552471 2.529882 36.442353 6.26447 53.850353h534.40753c3.734588-17.468235 6.324706-35.297882 6.324706-53.850353 0-148.781176-122.458353-269.372235-273.528471-269.372236z m367.435294-16.263529a27.708235 27.708235 0 0 1-38.671059 0l-38.671058-38.128941a26.624 26.624 0 0 1 0-38.128941l116.013176-114.266353a27.648 27.648 0 0 1 38.671059 0l38.731294 38.128941a26.624 26.624 0 0 1 0 38.068706L969.788235 360.990118zM629.699765 215.642353h-54.693647a27.105882 27.105882 0 0 1-27.346824-26.925177V27.166118a27.105882 27.105882 0 0 1 27.346824-26.925177h54.693647c15.058824 0 27.346824 12.047059 27.346823 26.925177v161.611294a27.105882 27.105882 0 0 1-27.346823 26.925176zM273.588706 360.990118a27.708235 27.708235 0 0 1-38.671059 0L118.844235 246.723765a26.624 26.624 0 0 1 0-38.068706l38.731294-38.128941a27.648 27.648 0 0 1 38.671059 0l116.013177 114.266353a26.624 26.624 0 0 1 0 38.128941l-38.671059 38.068706z m-81.498353 555.008h820.525176c15.058824 0 27.346824 12.047059 27.346824 26.925176v53.910588a27.105882 27.105882 0 0 1-27.346824 26.925177H192.090353a27.105882 27.105882 0 0 1-27.346824-26.925177v-53.910588a27.105882 27.105882 0 0 1 27.346824-26.925176z" fill="#5B5B5B" p-id="8293"></path></svg>早班</th>
+                <td id="11" class="staff_name">{{ schedule.day1time1 }}</td>
+                <td id="21" class="staff_name">{{ schedule.day2time1 }}</td>
+                <td id="31" class="staff_name">{{ schedule.day3time1 }}</td>
+                <td id="41" class="staff_name">{{ schedule.day4time1 }}</td>
+                <td id="51" class="staff_name">{{ schedule.day5time1 }}</td>
+                <td id="61" class="staff_name">{{ schedule.day6time1 }}</td>
+                <td id="71" class="staff_name">{{ schedule.day7time1 }}</td>
 
-    </tr>
-    <tr>
-        <th scope="row">中班</th>
-        <td id="12">{{ schedule.day1time2 }}</td>
-        <td id="22">{{ schedule.day2time2 }}</td>
-        <td id="32">{{ schedule.day3time2 }}</td>
-        <td id="42">{{ schedule.day4time2 }}</td>
-        <td id="52">{{ schedule.day5time2 }}</td>
-        <td id="62">{{ schedule.day6time2 }}</td>
-        <td id="72">{{ schedule.day7time2 }}</td>
-    </tr>
-    <tr>
-      <th scope="row">晚班</th>
-        <td id="13">{{ schedule.day1time3 }}</td>
-        <td id="23">{{ schedule.day2time3 }}</td>
-        <td id="33">{{ schedule.day3time3 }}</td>
-        <td id="43">{{ schedule.day4time3 }}</td>
-        <td id="53">{{ schedule.day5time3 }}</td>
-        <td id="63">{{ schedule.day6time3 }}</td>
-        <td id="73">{{ schedule.day7time3 }}</td>
-    </tr>
-  </tbody>
-</table>
+            </tr>
+            <tr class="table_row">
+                <th scope="row"><svg t="1712046458179" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9304" width="20" height="20"><path d="M500.8896 977.92c-20.48 0-40.96-15.36-40.96-40.96v-122.88c0-20.48 15.36-40.96 40.96-40.96s40.96 15.36 40.96 40.96v122.88c-5.12 25.6-20.48 40.96-40.96 40.96zM966.8096 537.6h-122.88c-20.48 0-40.96-15.36-40.96-40.96s15.36-40.96 40.96-40.96h122.88c20.48 0 40.96 15.36 40.96 40.96s-20.48 40.96-40.96 40.96zM209.0496 537.6h-122.88c-20.48 0-40.96-15.36-40.96-40.96s15.36-40.96 40.96-40.96h122.88c20.48 0 40.96 15.36 40.96 40.96s-20.48 40.96-40.96 40.96zM838.8096 849.92c-10.24 0-20.48-5.12-25.6-10.24l-87.04-87.04c-15.36-15.36-15.36-40.96 0-56.32s40.96-15.36 56.32 0l87.04 87.04c15.36 15.36 15.36 40.96 0 56.32-10.24 5.12-20.48 10.24-30.72 10.24zM301.2096 312.32c-10.24 0-20.48-5.12-25.6-10.24l-87.04-87.04c-15.36-15.36-15.36-40.96 0-56.32s40.96-15.36 56.32 0l87.04 87.04c15.36 15.36 15.36 40.96 0 56.32-10.24 5.12-20.48 10.24-30.72 10.24zM214.1696 849.92c-10.24 0-20.48-5.12-25.6-10.24-15.36-15.36-15.36-40.96 0-56.32l87.04-87.04c15.36-15.36 40.96-15.36 56.32 0s15.36 40.96 0 56.32l-87.04 87.04c-10.24 5.12-20.48 10.24-30.72 10.24zM751.7696 312.32c-10.24 0-20.48-5.12-25.6-10.24-15.36-15.36-15.36-40.96 0-56.32l87.04-87.04c15.36-15.36 40.96-15.36 56.32 0s15.36 40.96 0 56.32l-87.04 87.04c-10.24 5.12-20.48 10.24-30.72 10.24zM500.8896 220.16c-20.48 0-40.96-15.36-40.96-40.96V56.32c0-20.48 15.36-40.96 40.96-40.96s40.96 15.36 40.96 40.96v122.88c-5.12 25.6-20.48 40.96-40.96 40.96zM521.3696 737.28c-128 0-230.4-102.4-230.4-230.4s102.4-230.4 230.4-230.4 230.4 102.4 230.4 230.4-102.4 230.4-230.4 230.4z m0-384c-87.04 0-153.6 66.56-153.6 153.6s66.56 153.6 153.6 153.6 153.6-66.56 153.6-153.6-71.68-153.6-153.6-153.6z" p-id="9305"></path></svg>中班</th>
+                <td id="12" class="staff_name">{{ schedule.day1time2 }}</td>
+                <td id="22" class="staff_name">{{ schedule.day2time2 }}</td>
+                <td id="32" class="staff_name">{{ schedule.day3time2 }}</td>
+                <td id="42" class="staff_name">{{ schedule.day4time2 }}</td>
+                <td id="52" class="staff_name">{{ schedule.day5time2 }}</td>
+                <td id="62" class="staff_name">{{ schedule.day6time2 }}</td>
+                <td id="72" class="staff_name">{{ schedule.day7time2 }}</td>
+            </tr>
+            <tr class="table_row">
+              <th scope="row"><svg t="1712046479576" class="icon" viewBox="0 0 1204 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10272" width="20" height="20"><path d="M1004.483765 686.019765c27.105882 0 53.067294-3.794824 78.305882-9.637647a472.726588 472.726588 0 0 1-45.296941 104.207058 492.363294 492.363294 0 0 1-425.86353 242.386824C340.329412 1022.976 120.470588 807.454118 120.470588 541.515294 120.470588 275.757176 340.329412 60.235294 611.568941 60.235294c20.48 0 40.598588 1.626353 60.416 3.97553 39.333647 4.818824 77.101176 14.155294 113.001412 27.467294-75.294118 61.801412-124.265412 153.539765-124.265412 257.385411 0 186.127059 153.901176 336.956235 343.762824 336.956236z m-41.200941 94.208zM562.477176 349.063529c0-76.980706 21.504-148.600471 57.524706-211.124705-3.614118 6.264471-7.830588 12.227765-11.083294 18.672941-215.762824 1.445647-390.204235 173.176471-390.204235 384.963764 0 212.690824 175.887059 385.084235 392.854588 385.084236a394.541176 394.541176 0 0 0 312.19953-151.913412c-205.522824-37.225412-361.291294-213.473882-361.291295-425.682824z" fill="#5B5B5B" p-id="10273"></path></svg>晚班</th>
+                <td id="13" class="staff_name">{{ schedule.day1time3 }}</td>
+                <td id="23" class="staff_name">{{ schedule.day2time3 }}</td>
+                <td id="33" class="staff_name">{{ schedule.day3time3 }}</td>
+                <td id="43" class="staff_name">{{ schedule.day4time3 }}</td>
+                <td id="53" class="staff_name">{{ schedule.day5time3 }}</td>
+                <td id="63" class="staff_name">{{ schedule.day6time3 }}</td>
+                <td id="73" class="staff_name">{{ schedule.day7time3 }}</td>
+            </tr>
+          </tbody>
+        </table>
+   </div>
+</div>
+<style>
+.tableSchedule{
+    width: 100%;
+    padding: 30px;
+}
+.buttonTop{
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+.tableContent{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    border: #b8daff solid 2px;
+    border-radius: 5px;
+    padding: 10px;
+}
+</style>
 <script>
     $('#schedule').click(function (){
             var _this = $(this)

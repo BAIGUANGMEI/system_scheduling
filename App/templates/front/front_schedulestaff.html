@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="scheduleStaff">
+        <div class="textTop">
+            <h1 class="display-5 text-center">按员工查看排班</h1>
+        </div>
+        <div class="scheduleContent">
+            <table class="table ">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">姓名</th>
+                    <th scope="col">周一早班</th>
+                  <th scope="col">周一中班</th>
+                  <th scope="col">周一晚班</th>
+                    <th scope="col">周二早班</th>
+                  <th scope="col">周二中班</th>
+                  <th scope="col">周二晚班</th>
+                    <th scope="col">周三早班</th>
+                  <th scope="col">周三中班</th>
+                  <th scope="col">周三晚班</th>
+                    <th scope="col">周四早班</th>
+                  <th scope="col">周四中班</th>
+                  <th scope="col">周四晚班</th>
+                    <th scope="col">周五早班</th>
+                  <th scope="col">周五中班</th>
+                  <th scope="col">周五晚班</th>
+                    <th scope="col">周六早班</th>
+                  <th scope="col">周六中班</th>
+                  <th scope="col">周六晚班</th>
+                    <th scope="col">周日早班</th>
+                  <th scope="col">周日中班</th>
+                  <th scope="col">周日晚班</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for key in final_schedule %}
+                <tr>
+                  <th scope="row">{{ key }}</th>
+                    {% for i in final_schedule[key] %}
+                        {% if i == 1 %}
+                            <th style="background-color: #ff593f; color: white ">有班</th>
+                        {% elif i == 2 %}
+                            <th style="background-color: #288905; color: white">请假</th>
+                        {% elif i == 3 %}
+                            <th style="background-color: #ef9714; color: white">替班</th>
+                        {% else %}
+                            <th style="background-color: #7abaff; color: white"></th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    </div>
+    <style>
+    .scheduleStaff{
+        width: 100%;
+        padding: 30px;
+    }
+    .scheduleContent{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        border: #b8daff solid 2px;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    </style>
+{% endblock %}

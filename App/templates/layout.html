@@ -5,24 +5,21 @@
     <title>这是统一模版</title>
     <link rel="stylesheet" href="{{ url_for('static' ,filename='css/bootstrap.css') }}">
     <style>
-        #title{
-            color: #005cbf;
-        }
         .bottom:hover{
-            border-bottom: #005cbf solid 2px;
+            border-bottom: #a90404 solid 2px;
         }
     </style>
 </head>
-<body>
+<body data-spy="scroll" data-target="#navbar-example2">
     <div>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #b8daff">
+        <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #ff3c3c">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon" ></span>
             </button>
                 <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static',filename='img/logo02.png') }}" width="40" height="40" class="d-inline-block align-top" alt="">
-                <span style="font-size: 30px;">智能排班系统</span>
+                <img src="{{ url_for('static',filename='img/indexlogo.png') }}" width="40" height="40" class="d-inline-block align-top" alt="">
+                <span style="font-size: 30px; color: white">智能排班系统</span>
                 </a>
                     <div id="navbarTogglerDemo03" class="collapse navbar-collapse" >
                         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -38,11 +35,17 @@
                                 </a>
                                 <div class="dropdown-menu">
                                   <a class="dropdown-item" href="{{ url_for('front.schedule') }}">按周查看</a>
-                                  <a class="dropdown-item" href="#">按员工查看</a>
+                                  <a class="dropdown-item" href="{{ url_for('front.schedule_s') }}">按员工查看</a>
                                 </div>
                               </li>
-                              <li class="nav-item ">
-                                <a class="nav-link bottom" href="{{ url_for('front.staff') }}">员工管理</a>
+                              <li class="nav-item dropdown ">
+                                <a class="nav-link dropdown-toggle bottom" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                  员工管理
+                                </a>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="{{ url_for('front.staff') }}">员工信息管理</a>
+                                  <a class="dropdown-item" href="{{ url_for('front.staff_request') }}">员工请求管理</a>
+                                </div>
                               </li>
                               <li class="nav-item ">
                                 <a class="nav-link bottom" href="{{ url_for('front.about') }}">关于</a>
@@ -71,6 +74,11 @@
         </nav>
         </header>
     </div>
+    <style>
+        body {
+          position: relative;
+        }
+    </style>
     <script src="{{ url_for("static",filename="js/jquery.min.js") }}"></script>
     <script src="{{ url_for("static",filename="js/bootstrap.bundle.js") }}" ></script>
     <script src="{{ url_for("static",filename="js/echarts.js") }}"></script>
@@ -80,6 +88,8 @@
         $('#myModal').on('shown.bs.modal', function () {
           $('#myInput').trigger('focus')
         })
+
+
     </script>
 
     {% block content%}

@@ -2,39 +2,97 @@
 
 {% block content %}
 
-<div class="jumbotron jumbotron-fluid" >
-  <div class="container" style="height: 400px">
-    <h1 class="display-4">欢迎来到</h1>
-      <h1 class="display-4">蜜雪冰城员工排班系统</h1>
-      <hr class="my-4">
-      <a class="btn btn-primary btn-lg" href="{{ url_for('front.introduction') }}" role="button">了解门店详情</a>
-  </div>
-</div>
-
-<footer class="footer footer-transparent d-print-none">
-    <div class="container">
-        <div class=" text-center flex-row-reverse">
-            <div class="col-lg-auto ms-lg-auto">
-                <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item">
-                    <a href="#">Welcome to our website</a>
-                  </li>
-                  <li class="list-inline-item">
-                    <img src="{{ url_for("static",filename="img/heart.png") }}" width="20px">
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">Hope you have a nice day</a>
-                  </li>
-                </ul>
-            </div>
-            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#staticBackdrop">
-              Reward the author
-            </button>
-        </div>
-
+<div class="containerBox">
+{#    <img src="{{ url_for("static",filename="img/bgimg.png") }}" alt="" class="imgin"/>#}
+    <div class="indexTitle">
+        门店数据看板
     </div>
-</footer>
+    <div class="display">
+        <div class="topDisplay">
+            <div class="leftTopDisplay">
+                <div class="topContent">
+                    总经理：{{ user.username }}
+                </div>
+                <div class="botContent">
+                    <div class="card">
+                        <span>
+                        <svg t="1712037681282" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4241" width="20" height="20"><path d="M933.63875 605.15v-3.375 3.375z" p-id="4242"></path><path d="M446.39 405.24875c-36.7875-7.965-82.35-12.31875-132.3675-12.31875-122.81625 0-222.8175 28.2825-222.8175 63.1125 0 34.7625 100.00125 63.07875 222.8175 63.07875 49.275 0 95.61375-4.3875 132.3675-12.3525h1.485c12.4875-2.86875 24.3-5.77125 33.8175-8.67375 34.59375-10.90125 55.18125-25.38 55.18125-41.34375 0-21.76875-35.3025-39.8925-90.45-51.5025z m241.245-118.935c-130.91625 0-237.56625-33.345-244.89-74.68875v108.77625c6.615 41.34375 113.97375 74.68875 244.89 74.68875 130.91625 0 237.5325-33.345 244.89-74.68875V211.625c-6.615 42.0525-113.97375 74.68875-244.89 74.68875z" p-id="4243"></path><path d="M442.745 169.5725c0 43.63875 109.62 79.0425 244.89 79.0425 135.23625 0 244.89-35.40375 244.89-79.0425 0-43.6725-109.65375-79.0425-244.89-79.0425-135.27 0-244.89 35.37-244.89 79.0425zM536.13125 746.8325c-2.93625 17.415-24.3 32.63625-57.375 44.2125-40.4325 14.5125-99.25875 23.22-164.7 23.22-118.4625 0-215.49375-29.7-222.1425-67.4325v118.935c5.90625 37.69875 102.97125 67.4325 222.10875 67.4325 119.1375 0 215.49375-29.7 222.075-67.4325v-118.935z" p-id="4244"></path><path d="M536.13125 624.2525c-1.485 10.15875-10.29375 20.3175-24.3 29.025-11.745 7.25625-27.91125 13.77-46.305 19.575-7.3575 2.19375-14.715 4.3875-22.78125 5.805-36.045 7.965-80.19 13.06125-127.98 13.06125-118.395 0-215.49375-29.73375-222.075-67.46625v84.88125c5.8725 37.69875 102.9375 67.4325 222.075 67.4325 49.275 0 94.8375-5.0625 131.625-13.77 52.245-12.3525 86.805-31.9275 90.45-53.6625v-49.3425l-0.70875-35.53875z" p-id="4245"></path><path d="M536.13125 491.5475c-1.485 9.45-9.55125 18.86625-22.0725 27.57375-11.745 7.965-27.2025 14.5125-46.33875 20.28375-8.1 2.19375-16.875 5.0625-25.7175 6.5475-36.045 7.965-80.15625 13.06125-127.98 13.06125-118.395 0-215.46-29.73375-222.075-67.46625v95.00625c5.8725 37.69875 102.9375 67.4325 222.075 67.4325 60.31125 0 115.45875-7.965 155.1825-20.28375 38.98125-12.31875 63.2475-29.025 66.92625-47.14875v-95.00625zM443.825 605.15v-3.375 3.375z m93.015 19.1025v36.28125c41.9175 10.125 94.12875 16.6725 150.76125 16.6725 130.91625 0 237.5325-33.345 244.89-74.68875v-94.2975c-6.615 41.34375-113.97375 74.7225-244.89 74.7225-56.6325 0-109.58625-6.5475-150.76125-16.70625v58.05z" p-id="4246"></path><path d="M536.87375 746.8325v65.2725c41.9175 10.125 94.12875 16.6725 150.76125 16.6725 130.91625 0 237.5325-33.345 244.89-74.68875v-110.2275c-6.615 41.31-113.97375 74.68875-244.89 74.68875-56.6325 0-109.58625-6.5475-150.76125-16.6725v44.955zM932.525 361.745c-6.615 41.34375-113.97375 74.68875-244.89 74.68875-56.6325 0-109.58625-6.51375-150.76125-16.6725-8.1-2.16-15.4575-4.35375-22.0725-6.51375-41.9175-13.06125-68.41125-31.9275-72.05625-51.5025v51.5025c52.92 10.8675 87.51375 29.025 87.51375 49.275 0 1.485 0 3.645-0.7425 5.09625 1.45125-3.61125 6.615-14.5125 7.3575-26.08875v82.6875c41.9175 10.125 94.12875 16.63875 150.76125 16.63875 130.91625 0 237.5325-33.345 244.89-74.68875V361.745z" p-id="4247"></path></svg>
+                        今日营业额</span>
+                        <span class="content">￥4130.56</span>
+                    </div>
+                    <div class="card">
+                        <span>
+                            <svg t="1712037781985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5241" width="20" height="20"><path d="M800.037628 928.016126 223.962372 928.016126c-52.980346 0-95.983874-43.003528-95.983874-95.983874l0-639.892491c0-52.980346 43.003528-95.983874 95.983874-95.983874l575.903242 0c52.980346 0 95.983874 43.003528 95.983874 95.983874l0 639.892491C896.021502 884.840585 852.84596 928.016126 800.037628 928.016126zM223.962372 159.973123c-17.545439 0-31.994625 14.449185-31.994625 31.994625l0 639.892491c0 17.717453 14.449185 31.994625 31.994625 31.994625l575.903242 0c17.717453 0 31.994625-14.277171 31.994625-31.994625l0-639.892491c0-17.545439-14.277171-31.994625-31.994625-31.994625L223.962372 159.973123z" fill="#575B66" p-id="5242"></path><path d="M640.924576 544.768688 287.779607 544.768688c-17.717453 0-31.994625-14.277171-31.994625-31.994625 0-17.717453 14.277171-31.994625 31.994625-31.994625l353.144969 0c17.717453 0 31.994625 14.277171 31.994625 31.994625C672.9192 530.491517 658.642029 544.768688 640.924576 544.768688z" fill="#575B66" p-id="5243"></path><path d="M734.84428 735.532337l-447.236687 0c-17.717453 0-31.994625-14.277171-31.994625-31.994625s14.277171-31.994625 31.994625-31.994625l447.236687 0c17.717453 0 31.994625 14.277171 31.994625 31.994625S752.561734 735.532337 734.84428 735.532337z" fill="#575B66" p-id="5244"></path><path d="M255.784982 305.325046c0 26.490173 21.501764 47.991937 47.991937 47.991937s47.991937-21.501764 47.991937-47.991937-21.501764-47.991937-47.991937-47.991937S255.784982 278.834873 255.784982 305.325046z" fill="#575B66" p-id="5245"></path><path d="M463.061986 305.325046c0 26.490173 21.501764 47.991937 47.991937 47.991937s47.991937-21.501764 47.991937-47.991937-21.501764-47.991937-47.991937-47.991937S463.061986 278.834873 463.061986 305.325046z" fill="#575B66" p-id="5246"></path><path d="M671.199059 305.325046c0 26.490173 21.501764 47.991937 47.991937 47.991937s47.991937-21.501764 47.991937-47.991937-21.501764-47.991937-47.991937-47.991937S671.199059 278.834873 671.199059 305.325046z" fill="#575B66" p-id="5247"></path></svg>
+                            今日订单数</span>
+                        <span class="content">478个</span>
+                    </div>
+                    <div class="card">
+                        <span>
+                            <svg t="1712037811958" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6264" width="20" height="20"><path d="M809.274544 847.736531c-18.866696 0-34.133402-15.283078-34.133402-34.133402 0-25.632797-62.700017-68.017116-180.366927-80.899518-17.333784-1.90028-30.433126-16.517185-30.433126-33.932834L564.341089 661.137669c0-11.516288 5.8001-22.267143 15.46625-28.566616 47.600111-31.116695 79.56615-96.117105 79.56615-161.749918 0-153.316851-70.466911-172.983773-131.833561-172.983773-61.400419 0-131.866307 19.666922-131.866307 172.983773 0 65.632813 31.999808 130.633223 79.599919 161.749918 9.667174 6.299473 15.46625 17.050328 15.46625 28.566616l0 37.633109c0 17.416671-13.100366 32.033577-30.433126 33.932834-117.66691 12.883425-180.366927 55.266721-180.366927 80.899518 0 18.850323-15.266705 34.133402-34.133402 34.133402s-34.133402-15.283078-34.133402-34.133402c0-67.333548 77.69964-121.583103 201.233164-143.132908-52.700269-47.099714-85.500303-122.183783-85.500303-199.650109 0-199.400423 108.833731-241.249553 200.13311-241.249553s200.100364 41.850154 200.100364 241.249553c0 77.466326-32.800034 152.532999-85.466534 199.650109 123.533524 21.549805 201.233164 75.800383 201.233164 143.132908C843.407945 832.452429 828.14124 847.736531 809.274544 847.736531z" fill="#272636" p-id="6265"></path><path d="M527.541975 956.086238c-254.100232 0-460.799898-206.717062-460.799898-460.799898S273.441742 34.486442 527.541975 34.486442 988.341872 241.203504 988.341872 495.28634 781.641183 956.086238 527.541975 956.086238zM527.541975 102.753245c-216.433354 0-392.533095 176.083367-392.533095 392.533095s176.09974 392.533095 392.533095 392.533095 392.533095-176.083367 392.533095-392.533095S743.975329 102.753245 527.541975 102.753245z" fill="#272636" p-id="6266"></path></svg>
+                            员工数量</span>
+                        <span class="content">8位</span>
+                    </div>
+                </div>
+            </div>
+            <div class="rightTopDisplay">
+                <div class="funcTitle">
+                    排班系统功能
+                </div>
+                <div class="funcCard">
+                    <div class="card">
+                        <span class="content">门店信息</span>
+                        <span class="content">实时展示</span>
+                    </div>
+                    <div class="card">
+                        <span class="content">员工信息</span>
+                        <span class="content">统一管理</span>
+                    </div>
+                    <div class="card">
+                        <span class="content">智能柔性</span>
+                        <span class="content">一键排班</span>
+                    </div>
+                    <div class="card">
+                        <span class="content">员工请求</span>
+                        <span class="content">一键满足</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="botDisplay">
+            <div class="leftBotDisplay">
+                <div id="stafflike"> </div>
+            </div>
+            <div class="rightBotDisplay">
+                <div id="customer"> </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="titleBottom">
+        <footer class="footer footer-transparent d-print-none">
+            <div class="container">
+                <div class=" text-center flex-row-reverse">
+                    <div class="col-lg-auto ms-lg-auto">
+                        <ul class="list-inline list-inline-dots mb-0">
+                          <li class="list-inline-item">
+                            <a href=" ">Welcome to our website</a >
+                          </li>
+                          <li class="list-inline-item">
+                            <img src="{{ url_for("static",filename="img/heart.png") }}" width="20px">
+                          </li>
+                          <li class="list-inline-item">
+                            <a href="#">Hope you have a nice day</a >
+                          </li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#staticBackdrop">
+                      Reward the author
+                    </button>
+                </div>
 
+            </div>
+        </footer>
+    </div>
 {#模态框#}
 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -55,4 +113,224 @@
     </div>
   </div>
 </div>
+
+    <style>
+    .containerBox{
+        width: 100%;
+        height: 700px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        background-image: linear-gradient(180deg, #d74857, #e9817c, #f6b4a4, #ffe6cd);
+        .indexTitle{
+            width: 100%;
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .imgin{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                z-index: -1;
+        }
+        .display{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            .topDisplay{
+                width: 100%;
+                height: 30%;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+                .leftTopDisplay{
+                    width: 50%;
+                    height: 100%;
+                    backdrop-filter: blur(10px);
+                    margin: 10px;
+                    border-radius: 10px;
+                    .topContent{
+                        width: 100%;
+                        height: 30%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                    .botContent{
+                        width: 100%;
+                        height: 60%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        .card{
+                            width: 33%;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 10px 10px;
+                            background-color: #ffffff;
+                            border-radius: 10px;
+                            .content{
+                                font-size: 30px;
+                                font-weight: bold;
+                            }
+                        }
+                    }
+                }
+                .rightTopDisplay{
+                    width: 50%;
+                    height: 100%;
+                    margin: 10px;
+                    border-radius: 10px;
+                    backdrop-filter: blur(10px);
+                    .funcTitle{
+                        width: 100%;
+                        height: 20%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                    .funcCard{
+                        width: 100%;
+                        height: 80%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        .card{
+                            width: 45%;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 10px 10px;
+                            background-color: #ffffff;
+                            border-radius: 10px;
+                            .content{
+                                font-size: 20px;
+                                font-weight: bold;
+                            }
+                        }
+
+                    }
+                }
+            }
+            .botDisplay{
+                width: 100%;
+                height: 60%;
+                display: flex;
+                justify-content: space-between;
+                .leftBotDisplay{
+                    width: 50%;
+                    height: 100%;
+                    backdrop-filter: blur(10px);
+                    margin: 10px;
+                    border-radius: 10px;
+                    #stafflike{
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                    }
+                }
+                .rightBotDisplay{
+                    width: 50%;
+                    height: 100%;
+                    backdrop-filter: blur(10px);
+                    margin: 10px;
+                    border-radius: 10px;
+                    #customer{
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                    }
+                }
+            }
+        }
+    }
+    .titleBottom{
+        margin-top: 20px;
+            width: 100%;
+            height: 20%
+    }
+    </style>
+
+    <script type="text/javascript">
+        var myChart1 = echarts.init(document.getElementById('customer'));
+        var myChart2 = echarts.init(document.getElementById('stafflike'));
+
+         option1 = {
+               title: {
+                text: '今日客流量',
+                left: 'center'
+              },
+              tooltip: {
+                trigger: 'item'
+              },
+              legend: {
+                orient: 'vertical',
+                left: 'left'
+              },
+              series: [
+                {
+                  type: 'pie',
+                  data: [
+                    {
+                      value: 335,
+                      name: '早班'
+                    },
+                    {
+                      value: 234,
+                      name: '中班'
+                    },
+                    {
+                      value: 548,
+                      name: '晚班'
+                    }
+                  ],
+                  radius: '70%'
+                }
+              ]
+            };
+
+        option2 = {
+            title: {
+                text: '员工满意度',
+                left: 'center'
+              },
+          xAxis: {
+            type: 'category',
+            data: ['Jack', 'Martin', 'Lucy', 'Leo', 'Marry', 'Kitty', 'Jason','Paul'],
+            axisLabel: {
+              interval: 0,
+              rotate: 40
+            }
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [120, 200, 150, 80, 70, 110, 130, 100],
+              type: 'bar',
+                color: ['#f3cf70'],
+            }
+          ]
+        };
+
+         myChart1.setOption(option1);
+         myChart2.setOption(option2);
+
+    </script>
 {% endblock %}

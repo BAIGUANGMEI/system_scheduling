@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import time
 import pymysql
 
+# 字符处理方法1
 def readlist(str):
     output = []
     if str=='nan':
@@ -14,6 +15,7 @@ def readlist(str):
             output.append(int(i))
     return output
 
+# 字符处理方法2
 def readlist_1(str):
     str = str.replace('[','').replace(']','')
     output= str.split(',')
@@ -21,6 +23,7 @@ def readlist_1(str):
         output[i]=int(output[i])
     return output
 
+# 初始化数据
 def init(sch, num):
     for i in range(len(sch)):
         for j in range(len(sch[i])):
@@ -28,8 +31,10 @@ def init(sch, num):
 
     return sch
 
+# 计算适应度
 def calfit(sch, list_staffday,list_stafftime ,num_staff):
 
+    # 工作日偏好及工作时间偏好
     fit = 0
     for i in range(len(sch)):
         for j in range(len(sch[i])):
@@ -41,6 +46,7 @@ def calfit(sch, list_staffday,list_stafftime ,num_staff):
                 else:
                     fit += 0
 
+    # 一天内工作班次
     for n in range(0,num_staff):
         for i in range(len(sch)):
             continue_time = 0
@@ -52,6 +58,7 @@ def calfit(sch, list_staffday,list_stafftime ,num_staff):
             elif continue_time > 1:
                 fit += 1
 
+    # 连续工作班次
     continue_worktime = {}
 
     for n in range(0,num_staff):
@@ -60,13 +67,13 @@ def calfit(sch, list_staffday,list_stafftime ,num_staff):
             for j in range(len(sch[i])):
                 if n in sch[i][j]:
                     continue_worktime[n] += 1
-    # print(continue_worktime)
     for i in continue_worktime.keys():
         if continue_worktime[i] > 10 or continue_worktime[i] < 6:
             fit += 100
 
     return fit
 
+# 复制列表
 def copy_list(sch):
     s_sch = []
     for i in range(len(sch)):
@@ -77,6 +84,7 @@ def copy_list(sch):
         s_sch.append(day)
     return s_sch
 
+# 随机交换
 def swap(sch):
     original = copy_list(sch)
     i1 = random.randint(0, 6)
@@ -100,6 +108,7 @@ def swap(sch):
 
     return original
 
+# 随机变换
 def change(sch,staff_num):
     original = copy_list(sch)
     i = random.randint(0, 6)
@@ -111,6 +120,7 @@ def change(sch,staff_num):
     original[i][j][k] = t
     return original
 
+# 连接数据库
 def connect_db():
     db = pymysql.connect(host='124.220.80.142',
                          user='root',
@@ -119,6 +129,7 @@ def connect_db():
                          charset='utf8')
     return db
 
+# 获取员工数据
 def get_data(db):
     cursor = db.cursor()
     try:
@@ -144,19 +155,16 @@ def get_data(db):
                 data_day.append([i for i in range(0,7)])
                 data_time.append([i for i in range(0,7)])
         num_staff=len(result)
-        # print(data_day)
-        # print(data_time)
-        # print(num_staff)
-        print("victory!")
+        print("get data victory!")
 
         cursor.close()
 
         return data_day,data_time,num_staff
-        # 关闭游标
 
     except:
-        print("false")
+        print("get data false")
 
+# 获取客流数据
 def get_customer_flow(db):
     cursor = db.cursor()
 
@@ -168,29 +176,27 @@ def get_customer_flow(db):
         customer_flow=[]
         for data in range(1,len(result[0])-1):
             customer_flow.append(result[0][data])
-        # print(customer_flow)
 
         cursor.close()
 
-        print("victory!")
+        print("get customer flow victory!")
         return customer_flow
 
     except:
-        print("false")
+        print("get customer flow false")
 
-# '../Algorithm/data.xlsx'
-# '../Algorithm/data2.xlsx'
+# 算法部分
 def calculate():
-    # df_cus = pd.read_excel(path1)
-    # df_staff = pd.read_excel(path2)
+
+    # 连接数据库
     db = connect_db()
     print("connect success!")
     list_staffday,list_stafftime,num_staff=get_data(db)
-    print(list_staffday)
+
     customer_num=get_customer_flow(db)
     db.close()
-    print(customer_num)
 
+    # 初始化排班
     list_num = []
     for i in range(0, len(customer_num)):
         if i % 3 == 0:
@@ -198,18 +204,7 @@ def calculate():
             for j in range(3):
                 num.append(customer_num[i + j])
             list_num.append(num)
-    # print(list_num)
 
-    # list_staffday = []
-    # list_stafftime = []
-    # num_staff = len(df_staff['员工编号'])
-    #
-    # for i in range(len(df_staff['员工编号'])):
-    #     list_staffday.append(readlist(str(df_staff['员工天偏好'][i])))
-    #     list_stafftime.append(readlist(str(df_staff['员工时间偏好'][i])))
-
-    # print(list_staffday)
-    # print(list_stafftime)
     schdule = [[] for i in range(len(list_num))]
 
     for i in range(len(list_num)):
@@ -223,8 +218,6 @@ def calculate():
                 schdule[i].append([0 for i in range(2)])
 
     sch_ini = init(schdule, num_staff)
-    # print(sch_ini)
-    # print(calfit(sch_ini,list_staffday,list_stafftime))
 
     T = 30
     EPS = 1e-8
@@ -234,44 +227,36 @@ def calculate():
     result = []
     result_s=[]
 
+    #模拟退火算法
     old = copy_list(sch_ini)
-    # old=[[[6, 4], [1, 6, 0], [1, 4, 5]], [[2, 0], [3, 5], [0, 5, 1]], [[0, 5], [2, 4, 5], [0, 1, 5]], [[1, 6], [5, 2, 0], [5, 3, 1]], [[4, 2], [1, 6, 5], [4, 1, 5, 3]], [[2, 1, 6], [1, 2, 5, 4], [2, 3, 4, 5]], [[6, 4, 1], [0, 2, 1, 3], [2, 6, 0, 4]]]
     old_cal = calfit(old, list_staffday,list_stafftime, num_staff)
-    # print(old)
-    # print(old_cal)
 
     while T > EPS:
         for i in range(L):
             new = change(old,num_staff)
-            # new = swap(old)
-            # new=init()
             new_cal = calfit(new, list_staffday,list_stafftime, num_staff)
             if new_cal < old_cal:
                 result.append(calfit(new, list_staffday,list_stafftime, num_staff))
                 result_s.append(new)
                 old = copy_list(new)
                 old_cal = new_cal
-                # mini = old_cal
-                # ans = old
-                # result.append(old_cal)
             elif math.exp(-(new_cal - old_cal) / T) > (0.001 * random.randint(0, 1000)):
                 result.append(calfit(new, list_staffday,list_stafftime, num_staff))
                 result_s.append(new)
                 old = copy_list(new)
                 old_cal = new_cal
-                # mini = old_cal
-                # ans = old
 
         T = T * DELTA
 
-    plt.plot(pd.DataFrame(result).cummin(axis=0))
-    plt.plot(pd.DataFrame(result))
-    plt.show()
+    # plt.plot(pd.DataFrame(result).cummin(axis=0))
+    # plt.plot(pd.DataFrame(result))
+    # plt.show()
     # print(min(result))
     # print(calfit(result_s[result.index(min(result))], list_staffday,list_stafftime, num_staff))
     # print(result_s)
     return result_s[result.index(min(result))]
 
+# 按天查看排班转换
 def transform_day(ans):
     schedule = {}
     for i in range(len(ans)):
@@ -280,6 +265,7 @@ def transform_day(ans):
 
     return schedule
 
+# 按员工查看排班转换
 def transform_staff(ans, num_staff):
     schedule = {}
     for n in range(num_staff):
@@ -295,6 +281,7 @@ def transform_staff(ans, num_staff):
 if __name__ == '__main__':
     start = time.time()
     ans = calculate()
+    print(ans)
     print(transform_day(ans))
     print(transform_staff(ans, 8))
     # db = connect_db()
