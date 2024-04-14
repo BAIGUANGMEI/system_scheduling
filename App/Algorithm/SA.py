@@ -157,9 +157,13 @@ def get_data(db):
         num_staff=len(result)
         print("get data victory!")
 
+        cursor.execute("select id from staff")
+        id_list = cursor.fetchall()
+        id_list = [i[0] for i in id_list]
+
         cursor.close()
 
-        return data_day,data_time,num_staff
+        return data_day,data_time,num_staff,id_list
 
     except:
         print("get data false")
@@ -191,7 +195,7 @@ def calculate():
     # 连接数据库
     db = connect_db()
     print("connect success!")
-    list_staffday,list_stafftime,num_staff=get_data(db)
+    list_staffday,list_stafftime,num_staff,id_list=get_data(db)
 
     customer_num=get_customer_flow(db)
     db.close()
@@ -253,8 +257,14 @@ def calculate():
     # plt.show()
     # print(min(result))
     # print(calfit(result_s[result.index(min(result))], list_staffday,list_stafftime, num_staff))
-    # print(result_s)
-    return result_s[result.index(min(result))]
+
+    final_result = result_s[result.index(min(result))]
+
+    for i in final_result:
+        for j in i:
+            for k in range(len(j)):
+                j[k] = id_list[j[k]]-1
+    return final_result
 
 # 按天查看排班转换
 def transform_day(ans):

@@ -62,10 +62,15 @@ def get_data(db):
                 data_day.append([i for i in range(0,7)])
                 data_time.append([i for i in range(0,7)])
         num_staff=len(result)
+        print("get data victory!")
+
+        cursor.execute("select id from staff")
+        id_list = cursor.fetchall()
+        id_list = [i[0] for i in id_list]
 
         cursor.close()
 
-        return data_day,data_time,num_staff
+        return data_day,data_time,num_staff,id_list
 
     except:
         print("get data false")
@@ -132,6 +137,12 @@ def trans2sch(sch):
             schedule[i // 3].append(sch[i + 2])
     return schedule
 
+def changeid(sch,id_list):
+    for i in sch:
+        for j in i:
+            for k in range(len(j)):
+                j[k] = id_list[j[k]]-1
+    return sch
 
 def main(leavestaff,leaveday,leavetime):
     db = connect_db()
@@ -142,6 +153,8 @@ def main(leavestaff,leaveday,leavetime):
     result = cursor.fetchall()
     old_schedule = list(result[0][1:22])
 
+    list_staffday, list_stafftime, num_staff, id_list = get_data(db)
+
     # 将字符串转换为列表
     for i in range(len(old_schedule)):
         old_schedule[i] = old_schedule[i].strip('[]')
@@ -149,34 +162,43 @@ def main(leavestaff,leaveday,leavetime):
         for j in range(len(old_schedule[i])):
             old_schedule[i][j] = int(old_schedule[i][j])
     # print(trans2sch(old_schedule))
+    old_schedule = trans2sch(old_schedule)
+    for i in old_schedule:
+        for j in i:
+            for k in range(len(j)):
+                j[k] = id_list.index(j[k]+1)
+    # print(old_schedule)
 
-    list_staffday, list_stafftime, num_staff = get_data(db)
     # print(calfit(trans2sch(old_schedule), list_staffday, list_stafftime, num_staff))
     # print(calfit_change(trans2sch(old_schedule), list_staffday, list_stafftime, num_staff,leavestaff,leaveday,leavetime))
-    sch = trans2sch(old_schedule)
+    sch = old_schedule
 
     minimum = 1000000
 
-    for i in range(num_staff):
-        if i != leavestaff and i not in sch[leaveday][leavetime]:
+    for i in id_list:
+        if i-1 != leavestaff and i-1 not in sch[leaveday][leavetime]:
             new_sch = copy_list(sch)
-            new_sch[leaveday][leavetime].remove(leavestaff)
-            new_sch[leaveday][leavetime].append(i)
+            new_sch[leaveday][leavetime].remove(id_list.index(leavestaff+1))
+            new_sch[leaveday][leavetime].append(id_list.index(i))
             if calfit(new_sch, list_staffday, list_stafftime, num_staff) < minimum:
                 minimum = calfit(new_sch, list_staffday, list_stafftime, num_staff)
                 new_schedule = copy_list(new_sch)
                 # print(minimum)
-
+    # print(new_schedule)
     db.close()
+
+    sch = changeid(sch,id_list)
+    new_schedule = changeid(new_schedule,id_list)
 
     leave_staff = sch[leaveday][leavetime][sch[leaveday][leavetime].index(leavestaff)]
 
     change_staff = new_schedule[leaveday][leavetime][sch[leaveday][leavetime].index(leavestaff)]
 
+
     return sch,new_schedule,leave_staff,change_staff,leaveday,leavetime
 
 if __name__ == '__main__':
-    sch,new_schedule,leave_staff,change_staff = main(1,0,1)
+    sch,new_schedule,leave_staff,change_staff,leaveday,leavetime = main(12,0,1)
     print(sch)
     print(new_schedule)
     print(leave_staff)

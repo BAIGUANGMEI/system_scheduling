@@ -1,71 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>员工详情</title>
-  <link rel="stylesheet" href="{{ url_for('static' ,filename='css/bootstrap.css') }}">
-</head>
-<body>
-<div class="container">
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container" style="margin-bottom: 100px;margin-top: 50px">
     <div class="card">
-        <h4>
-            员工详情
-        </h4>
-        <p>
-            姓名：{{ staff.name }}
-        </p>
-        <p>
-            性别：{{ staff.gender }}
-        </p>
-        <p>
-            年龄：{{ 2023  - staff.birthyear }}
-        </p>
-        <p>
-            喜欢的工作日：
-            {% if staff.daylike == None %}
-                        无
-            {% else %}
-                {% for i in staff.daylike  %}
-                    {% if i in ['0','1','2','3','4','5','6'] %}
-                        {% if i == '0' %}
-                            星期一
-                        {% elif i == '1' %}
-                            星期二
-                        {% elif i == '2' %}
-                            星期三
-                        {% elif i == '3' %}
-                            星期四
-                        {% elif i == '4' %}
-                            星期五
-                        {% elif i == '5' %}
-                            星期六
-                        {% elif i == '6' %}
-                            星期日
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p>
-        <p>
-            喜欢的工作班次：
-            {% if staff.timelike == None %}
+        <h3 style="text-align: center;background-color: rgba(188,205,204,0.5)">
+            员工资料
+        </h3>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="margin-left:15px;font-size: large;margin-top: 25px">
+                        <div style="margin-top: 12px">
+                            姓名：{{ staff.name }}
+                        </div>
+                    </td>
+                    <td style="font-size: large">
+                        <div style="margin-top: 12px">
+                            id: {{ staff.id }}
+                        </div>
+                    </td>
+                    <td style="width: 200px;font-size: large" rowspan="2"><img src="{{ url_for('static',filename='staff_img/avatar.png') }}" style="width: 150px;height: 120px;margin-left: 13px"></td>
+                </tr>
+                <tr>
+                    <td style=" margin-left:15px;font-size: large">
+                        <div style="margin-top: 12px">
+                            性别：{{ staff.gender }}
+                        </div>
+                    </td>
+                    <td style="font-size: large">
+                        <div style="margin-top: 12px">
+                            年龄：{{ 2023  - staff.birthyear }}
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-bordered">
+            <tr>
+                <td style="font-size: large">
+                    工作日偏好：
+                {% if staff.daylike == None %}
                     无
-            {% else %}
-                {% for i in staff.timelike %}
-                        {% if i == '0' %}
-                            早班
-                        {% elif i == '1' %}
-                            午班
-                        {% elif i == '2' %}
-                            晚班
+                {% else %}
+                    {% for i in staff.daylike %}
+                        {% if i in ['1','2','3','4','5','6','7'] %}
+                            {% if i == '1' %}
+                                星期一
+                            {% elif i == '2' %}
+                                星期二
+                            {% elif i == '3' %}
+                                星期三
+                            {% elif i == '4' %}
+                                星期四
+                            {% elif i == '5' %}
+                                星期五
+                            {% elif i == '6' %}
+                                星期六
+                            {% elif i == '7' %}
+                                星期日
+                            {% endif %}
                         {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p>
+                    {% endfor %}
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: large">
+                    工作时间偏好：
+                {% if staff.timelike == None %}
+                    无
+                {% else %}
+                    {% for i in staff.timelike  %}
+                        {% if i in ['1','2','3'] %}
+                            {% if i == '1' %}
+                                上午
+                            {% elif i == '2' %}
+                                下午
+                            {% elif i == '3' %}
+                                晚上
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </td>
+            </tr>
+        </table>
         <form method="post">
-            <button type="submit" class="btn btn-primary" >返回</button>
+            <button type="submit" class="btn btn-primary" style="margin-left: 500px;margin-bottom: 10px">返回</button>
         </form>
     </div>
 </div>
-</body>
-</html>
+{% endblock %}

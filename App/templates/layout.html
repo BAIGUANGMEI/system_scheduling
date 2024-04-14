@@ -74,9 +74,18 @@
         </nav>
         </header>
     </div>
+
     <style>
         body {
-          position: relative;
+            .colorbg{
+                background-image: linear-gradient(180deg, #d74857, #e9817c, #f6b4a4, #ffe6cd);
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                bottom: 0;
+                top:70px;
+                z-index: -1;
+            }
         }
     </style>
     <script src="{{ url_for("static",filename="js/jquery.min.js") }}"></script>
@@ -91,8 +100,9 @@
 
 
     </script>
-
+    <div class="colorbg">
     {% block content%}
     {% endblock %}
+    </div>
 </body>
 </html>

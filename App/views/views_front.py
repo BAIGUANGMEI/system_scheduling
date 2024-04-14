@@ -90,6 +90,8 @@ def schedule_s():
     staff = Staff.query.all()
     final_schedule = {}
     staff_name = []
+    id_list = Staff.query.with_entities(Staff.id).all()
+    id_list = [i[0] for i in id_list]
     try:
         for i in staff:
             final_schedule[str(i.id)]=[0 for k in range(21)]
@@ -103,23 +105,28 @@ def schedule_s():
             for j in example:
                 final_schedule[str(int(j)+1)][i] = 1
         change_info = getattr(schedule,'change')
-        if change_info != 'nan':
+        if change_info != None:
             change_info = change_info.replace('[','').replace(']','').split(',')
-            leave_info = [int(change_info[0]),int(change_info[1]),int(change_info[2]),int(change_info[3])]
-            change_info = [int(change_info[4]),int(change_info[5]),int(change_info[6]),int(change_info[7])]
+            leave_info = [id_list.index(int(change_info[0])+1),int(change_info[1]),int(change_info[2]),int(change_info[3])]
+            change_info = [id_list.index(int(change_info[4])+1),int(change_info[5]),int(change_info[6]),int(change_info[7])]
             # print(leave_info,change_info)
             index_leave = 3*leave_info[1] + leave_info[2]
             index_change = 3*change_info[1] + change_info[2]
             final = {}
-        for i in range(len(staff_name)):
-            final[staff_name[i]] = final_schedule[str(i+1)]
-        final[staff_name[leave_info[0]]][index_leave] = leave_info[3]
-        final[staff_name[change_info[0]]][index_change] = change_info[3]
-        # print(final)
+            for i in range(len(id_list)):
+                final[staff_name[i]] = final_schedule[str(id_list[i])]
+            final[staff_name[leave_info[0]]][index_leave] = leave_info[3]
+            final[staff_name[change_info[0]]][index_change] = change_info[3]
+            # print(final)
+        else:
+            final = {}
+            for i in range(len(staff_name)):
+                final[staff_name[i]] = final_schedule[str(id_list[i])]
     # 异常处理
     except Exception as e:
-        print(e)
+        # print(e)
         final_schedule = {}
+        return "error"
     return render_template('front/front_schedulestaff.html', flag=flag, user=user, final_schedule=final)
 
 #员工请求处理接口
@@ -168,11 +175,34 @@ def staff_add():
         staff_birthyear = request.form.get('staffbirthyear')
         staff_gender = request.form.get('staffgender')
         staff_workyear = request.form.get('staffworkyear')
-        staff = Staff(name=staff_name, gender=staff_gender, birthyear=staff_birthyear, workyear=staff_workyear)
+        staff_daylike = request.form.getlist('daylike')
+        staff_timelike = request.form.getlist('timelike')
+        print(staff_name, staff_birthyear,staff_gender,staff_workyear,staff_daylike,staff_timelike)
+        if staff_name == '':
+            return "Please input the name"
+        if staff_daylike == []:
+            staff_daylike = None
+        else:
+            for i in range(len(staff_daylike)):
+                staff_daylike[i] = int(staff_daylike[i])
+            staff_daylike = str(staff_daylike)
+        if staff_timelike == []:
+            staff_timelike = None
+        else:
+            for i in range(len(staff_timelike)):
+                staff_timelike[i] = int(staff_timelike[i])
+            staff_timelike = str(staff_timelike)
+        if staff_gender == 0:
+            staff_gender = 'male'
+        else:
+            staff_gender = 'female'
+
+        staff = Staff(name=staff_name, gender=staff_gender, birthyear=staff_birthyear, workyear=staff_workyear,daylike=staff_daylike,timelike=staff_timelike)
         try:
             db.session.add(staff)
             db.session.commit()
-            return redirect('/schedulesystem/staff/')
+            return 'OK'
+            # return redirect('/schedulesystem/staff/')
         except Exception as e:
             db.session.rollback()
             db.session.flush()
@@ -236,7 +266,7 @@ def schedule_daily():
         example=example.replace('[','')
         example=example.replace(']','')
         example=example.split(',')
-        # print(example)
+        print(example)
         for j in range(len(example)):
             staff = Staff.query.filter_by(id=int(example[j]) + 1).first()
             list.append(staff.name)
@@ -266,6 +296,7 @@ def staff_leave():
         if (leaveday == '' or leavetime == '' or leavestaff == ''):
             return redirect('/schedulesystem/staff/request')
         else:
+            # print(leaveday,leavetime,leavestaff)
             sch, new_schedule, leave_staff, change_staff, leaveday, leavetime = main(int(leavestaff)-1, int(leaveday)-1, int(leavetime))
             # print(sch)
             # print(new_schedule)
