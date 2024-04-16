@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="card" style="margin-left:200px;margin-right: 200px;margin-top: 120px">
+        <h3 style="text-align: center;background-color: rgba(188,205,204,0.5)">
+            更改员工信息
+        </h3>
+        <form method="post">
+         <table class="table table-bordered">
+            <tbody style="border-color: black;border-width:5px">
+                <tr>
+                    <td>
+                        <div class="input-group mb-3" style="margin-top: 15px">
+                          <div class="input-group-prepend" style="display: flex;justify-content: center;align-items: center;">
+                              <span style="font-size: 15px;font-weight: bold;">员工ID:<input type="text" value="{{ staff.id }}" style="width: 20px;border: 0;" id="staffid" name="staffid"></span>
+                            <span class="input-group-text" id="inputGroup-sizing-default">姓名</span>
+                          </div>
+                          <input type="text" style="width: 80px;" value="{{ staff.name }}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="staffname" name="staffname" placeholder="请输入员工姓名">
+                        </div>
+                    </td>
+                    <td style="font-size:large;font-size:large">
+                        <div style="margin-top: 15px">
+                            性别：
+                            {% if staff.gender == "male" %}
+                                <input type="radio" name="staffgender" value="0" checked>男
+                                <input type="radio" name="staffgender" value="1">女
+                            {% else %}
+                                <input type="radio" name="staffgender" value="0">男
+                                <input type="radio" name="staffgender" value="1" checked>女
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td style="width: 300px;font-size: large">
+                        <div class="input-group mb-3" style="margin-top: 15px">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">出生年份</span>
+                          </div>
+                          <input type="text" value="{{ staff.birthyear }}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="staffbirthyear" name="staffbirthyear" placeholder="请输入出生年份">
+                        </div>
+                    </td>
+                    <td style="font-size: large">
+                        <div style="margin-top: 15px">
+                            入职年份:
+                            <input type="text"  value="{{ staff.workyear }}" id="staffworkyear" name="staffworkyear" style="font-size: large">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="font-size: large">
+                      不喜欢的工作日期：
+                        <input type="checkbox" id="daylike0" name="daylike" value="0" style="margin-left: 10px">星期一
+                      <input type="checkbox" id="daylike1" name="daylike" value="1" style="margin-left: 10px">星期二
+                      <input type="checkbox" id="daylike2"id="daylike" name="daylike" value="2" style="margin-left: 10px">星期三
+                      <input type="checkbox" id="daylike3" name="daylike" value="3" style="margin-left: 10px">星期四
+                      <input type="checkbox" id="daylike4" name="daylike" value="4" style="margin-left: 10px">星期五
+                      <input type="checkbox" id="daylike5" name="daylike" value="5" style="margin-left: 10px">星期六
+                      <input type="checkbox" id="daylike6" name="daylike" value="6" style="margin-left: 10px">星期日
+                        <input type="checkbox" id="daylike6" name="daylike" value="7" style="margin-left: 10px">无偏好
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="font-size: large">
+                      不喜欢的工作时段：
+                      <input type="checkbox" id="timelike0" name="timelike" value="0" style="margin-left: 20px">上午
+                      <input type="checkbox" id="timelike1" name="timelike" value="1" style="margin-left: 20px">下午
+                      <input type="checkbox" id="timelike2" name="timelike" value="2" style="margin-left: 20px">晚上
+                        <input type="checkbox" id="timelike3" name="timelike" value="3" style="margin-left: 20px">无偏好
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+            <button type="submit" class="btn btn-primary" style="margin-left: 500px;margin-bottom: 10px">修改</button>
+        </form>
+            <button type="submit" class="btn btn-info" style="position: absolute;top:84%;left: 55%;">
+                <a href="{{ url_for('front.staff')}}" style="color: white">返回</a>
+            </button>
+    </div>
+{% endblock %}

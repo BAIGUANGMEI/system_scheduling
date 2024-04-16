@@ -4,7 +4,6 @@ from .views.views_admin import admin
 from .exts import init_ext
 
 
-
 def create_app():
     app = Flask(__name__)
 

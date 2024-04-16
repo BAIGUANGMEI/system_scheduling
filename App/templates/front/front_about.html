@@ -1,46 +1,118 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container"style="margin-top: 20px">
-    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 400px">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <h4 class="text-center">版本说明
-                        <a href="https://github.com/BAIGUANGMEI/schedulesystem" target="_blank" >
-                            <img style="width: 20px" src="{{ url_for('static',filename='img/github.png') }}">
-                        </a>
-                </h4>
-            </li>
-            <li class="list-group-item">
-               <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">版本名</th>
-                      <th scope="col">更新内容</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>init_v1.3</td>
-                      <td>加入了排班算法，实现了按周查看排班结果。</td>
-                    </tr>
-                    <tr>
-                      <td>init_v1.2</td>
-                      <td>增加了员工的信息查询和增删改功能</td>
-                    </tr>
-                    <tr>
-                      <td>init_v1.1</td>
-                      <td>支持用户登陆和注册，添加了门店信息，支持显示门店客流量。加入了打赏作者的功能。</td>
-                    </tr>
-                    <tr>
-                      <td>init_v1.0</td>
-                      <td>创建了前后端基本框架，添加了前端模版，首页。</td>
-                    </tr>
-                  </tbody>
-                </table>
-            </li>
+<style>
 
-        </ul>
+
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 0;
+}
+
+.timeline::after {
+    height: 100%;
+  content: '';
+  position: absolute;
+  width: 6px;
+  background-color: #ddd;
+  top: 3%;
+  bottom: 4%;
+  left: 15%;
+  margin-left: -3px;
+}
+
+.container {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 70%;
+}
+
+.container::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  right: -17px;
+  background-color: white;
+  border: 4px solid #ddd;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.right {
+  left: 0;
+}
+
+.right::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  left: 30px;
+  border: medium solid white;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent white transparent transparent;
+}
+
+.right::after {
+  left: -1.5%;
+}
+
+.content {
+  padding: 20px 30px;
+  background-color: white;
+  position: relative;
+  border-radius: 6px;
+}
+</style>
+
+<div class="timeline">
+  <div class="container right">
+    <div class="content">
+      <h2>init_v2.1</h2>
+      <p>新增员工增加功能。更新员工信息查看界面。</p>
     </div>
+  </div>
+  <div class="container right">
+    <div class="content">
+      <h2>init_v2.0</h2>
+      <p>新增按员工查看界面，员工请求界面，新增员工请假功能，使用贪心算法自动寻找替班的员工。更新排班系统主页为门店数据看板。</p>
+    </div>
+  </div>
+  <div class="container right">
+    <div class="content">
+      <h2>init_v1.4</h2>
+      <p>对排班功能进行完善。</p>
+    </div>
+  </div>
+  <div class="container right">
+    <div class="content">
+      <h2>init_v1.3</h2>
+      <p>新增按周查看排班信息页面，新增一键排班功能，引入模拟退火算法进行排班。</p>
+    </div>
+  </div>
+  <div class="container right">
+    <div class="content">
+      <h2>init_v1.2</h2>
+      <p>新增员工信息页面，新增员工信息查看功能。</p>
+    </div>
+  </div>
+  <div class="container right">
+    <div class="content">
+      <h2>init_v1.1</h2>
+      <p>新增排班系统首页，门店信息界面，新增登陆与注册功能。</p>
+    </div>
+  </div>
+  <div class="container right">
+    <div class="content">
+      <h2>init_v1.0</h2>
+      <p>创建项目，设计创建模版，数据库创建。</p>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -4,6 +4,7 @@ from ..models.models_front import *
 from ..models.models_admin import *
 from ..Algorithm.SA import *
 from ..Algorithm.Leave import *
+from ..Global_component.DataBaseStatus import DataBaseStatus
 
 front = Blueprint('front', __name__)
 
@@ -21,6 +22,8 @@ timelist2 = ['day1time1', 'day1time2', 'day1time3',
              'day5time1', 'day5time2', 'day5time3',
              'day6time1', 'day6time2', 'day6time3',
              'day7time1', 'day7time2', 'day7time3']
+
+dbstatus = DataBaseStatus()
 
 def if_login():
     # 判断是否登录
@@ -52,6 +55,8 @@ def introduction():
 # 排班情况的接口(按周查看)
 @front.route('/schedulesystem/schedule', methods=['GET', 'POST'])
 def schedule():
+    status = dbstatus.isChange
+    # print(dbstatus.isChange)
     # 判断是否登录
     flag, user_id = if_login()
     # 查询登陆用户信息
@@ -76,11 +81,12 @@ def schedule():
     except Exception as e:
         print(e)
         final_schedule = {}
-    return render_template('front/front_scheduledaily.html', flag=flag, user=user, schedule=final_schedule)
+    return render_template('front/front_scheduledaily.html', flag=flag, user=user, schedule=final_schedule,status=status)
 
 # 排班情况的接口（按员工查看）
 @front.route('/schedulesystem/schedulestaff', methods=['GET', 'POST'])
 def schedule_s():
+    status = dbstatus.isChange
     # 判断是否登录
     flag, user_id = if_login()
     # 查询登陆用户信息
@@ -127,7 +133,7 @@ def schedule_s():
         # print(e)
         final_schedule = {}
         return "error"
-    return render_template('front/front_schedulestaff.html', flag=flag, user=user, final_schedule=final)
+    return render_template('front/front_schedulestaff.html', flag=flag, user=user, final_schedule=final,status=status)
 
 #员工请求处理接口
 @front.route('/schedulesystem/staff/request', methods=['GET', 'POST'])
@@ -138,7 +144,7 @@ def staff_request():
     user = User.query.filter_by(id=user_id).first()
     # 返回员工的请求信息
     staff_request = Staff_request.query.all()
-    return render_template('front/front_staff_request.html', flag=flag, user=user, staff_request=staff_request)
+    return render_template('front/staff/front_staff_request.html', flag=flag, user=user, staff_request=staff_request)
 
 # 员工信息界面的接口
 @front.route('/schedulesystem/staff/', methods=['GET', 'POST'])
@@ -149,26 +155,89 @@ def staff():
     user = User.query.filter_by(id=user_id).first()
     # 查询所有员工的信息
     staffs = Staff.query.all()
-    return render_template('front/front_staff.html', flag=flag, user=user, staffs=staffs)
+    return render_template('front/staff/front_staff.html', flag=flag, user=user, staffs=staffs)
 
 #员工详情界面的接口
 @front.route('/schedulesystem/staff/detail', methods=['GET', 'POST'])
 def staff_detail():
+    # 判断是否登录
+    flag, user_id = if_login()
+    # 查询登陆用户信息
+    user = User.query.filter_by(id=user_id).first()
     # GET请求，获取员工id，查询员工信息
     if request.method == "GET":
         staff_id = request.args.get('sid')
         staff = Staff.query.filter_by(id=staff_id).first()
-        return render_template('front/front_staff_details.html', staff=staff)
+        return render_template('front/staff/front_staff_details.html', staff=staff, flag=flag, user=user)
     # POST请求，返回员工信息界面
     else:
         return redirect('/schedulesystem/staff/')
 
+# 员工信息修改的接口
+@front.route('/schedulesystem/staff/modify', methods=['GET', 'POST'])
+def staff_modify():
+    # 判断是否登录
+    flag, user_id = if_login()
+    # 查询登陆用户信息
+    user = User.query.filter_by(id=user_id).first()
+    # GET请求，获取员工id，查询员工信息
+    if request.method == "GET":
+        staff_id = request.args.get('sid')
+        staff = Staff.query.filter_by(id=staff_id).first()
+        return render_template('front/staff/front_staff_modify.html', staff=staff, flag=flag, user=user)
+    else:
+        staff_id = request.form.get('staffid')
+        staff_name = request.form.get('staffname')
+        staff_birthyear = request.form.get('staffbirthyear')
+        staff_gender = request.form.get('staffgender')
+        staff_workyear = request.form.get('staffworkyear')
+        staff_daylike = request.form.getlist('daylike')
+        staff_timelike = request.form.getlist('timelike')
+        # print(staff_name, staff_birthyear,staff_gender,staff_workyear,staff_daylike,staff_timelike)
+        staff = Staff.query.filter_by(id=staff_id).first()
+        if staff_name != '':
+            staff.name = staff_name
+        if staff_birthyear != '':
+            staff.birthyear = staff_birthyear
+        if staff_gender == 0:
+            staff.gender = 'male'
+        else:
+            staff.gender = 'female'
+        if staff_workyear != '':
+            staff.workyear = staff_workyear
+
+        if staff_daylike == []:
+            pass
+        elif staff_daylike[0] == '7':
+            staff.daylike = None
+        else:
+            for i in range(len(staff_daylike)):
+                staff_daylike[i] = int(staff_daylike[i])
+            staff.daylike = str(staff_daylike)
+        if staff_timelike == []:
+            pass
+        elif staff_timelike[0] =='3':
+            staff.timelike = None
+        else:
+            for i in range(len(staff_timelike)):
+                staff_timelike[i] = int(staff_timelike[i])
+            staff.timelike = str(staff_timelike)
+        db.session.commit()
+        dbstatus.changestatus(True)
+        print(dbstatus.isChange)
+        return redirect('/schedulesystem/staff/')
+
+
 # 增加员工的接口
 @front.route('/schedulesystem/staff/add', methods=['GET', 'POST'])
 def staff_add():
+    # 判断是否登录
+    flag, user_id = if_login()
+    # 查询登陆用户信息
+    user = User.query.filter_by(id=user_id).first()
     # GET请求，返回增加员工界面
     if request.method == "GET":
-        return render_template('front/front_staff_add.html')
+        return render_template('front/staff/front_staff_add.html', flag=flag, user=user)
     # POST请求，增加员工
     else:
         staff_name = request.form.get('staffname')
@@ -201,8 +270,10 @@ def staff_add():
         try:
             db.session.add(staff)
             db.session.commit()
-            return 'OK'
-            # return redirect('/schedulesystem/staff/')
+            dbstatus.changestatus(True)
+            print(dbstatus.isChange)
+            # return 'OK'
+            return redirect('/schedulesystem/staff/')
         except Exception as e:
             db.session.rollback()
             db.session.flush()
@@ -272,6 +343,7 @@ def schedule_daily():
             list.append(staff.name)
         final_schedule[timelist2[i]] = list
     # 返回排班信息
+    dbstatus.changestatus(False)
     return final_schedule
 
 #员工请假审批

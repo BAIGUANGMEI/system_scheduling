@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    {% if status==True %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>员工变动警告：</strong>员工信息变动，请重新排班。
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+    {% endif %}
 <div class="tableSchedule">
     <div class="textTop">
         <h1 class="display-5 text-center">按周查看排班</h1>
