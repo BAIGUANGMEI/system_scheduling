@@ -279,6 +279,7 @@ def staff_add():
             db.session.flush()
             return 'add staff fail' + str(e)
 
+
 # 网站信息的接口
 @front.route('/schedulesystem/about/', methods=['GET', 'POST'])
 def about():
