@@ -11,6 +11,7 @@ class Staff(db.Model):
     workyear = db.Column(db.Integer,nullable=False)
     daylike = db.Column(db.String(128),nullable=True)
     timelike = db.Column(db.String(128),nullable=True)
+    is_resign = db.Column(db.Boolean,nullable=False,default=False)
 
 class Schedule(db.Model):
     __tablename__ = 'schedule'

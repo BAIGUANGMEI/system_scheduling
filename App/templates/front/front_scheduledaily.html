@@ -14,11 +14,17 @@
         <h1 class="display-5 text-center">按周查看排班</h1>
     </div>
     <div class="buttonTop">
-        <button type="button" class="btn btn-outline-success" id="schedule" >一键排班</button>
-        <button class="btn btn-primary" type="button" disabled style="display: None" id="load">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"  ></span>
-          Loading
-        </button>
+        {% if flag == false %}
+            <button type="button" class="btn btn-info">
+                <a href="{{ url_for('admin.login')}}" style="color: white">一键排班请先登录</a>
+            </button>
+        {% else %}
+            <button type="button" class="btn btn-outline-success" id="schedule" >一键排班</button>
+            <button class="btn btn-primary" type="button" disabled style="display: None" id="load">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"  ></span>
+              Loading
+            </button>
+        {% endif %}
     </div>
     <div class="tableContent">
         <table class="table table-hover" style="width: 100%;height: 100%">

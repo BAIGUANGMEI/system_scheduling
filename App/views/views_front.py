@@ -25,6 +25,8 @@ timelist2 = ['day1time1', 'day1time2', 'day1time3',
 
 dbstatus = DataBaseStatus()
 
+
+
 def if_login():
     # 判断是否登录
     flag = False
@@ -40,7 +42,9 @@ def index():
     flag, user_id = if_login()
     # 查询登陆用户信息
     user = User.query.filter_by(id=user_id).first()
-    return render_template('front/front_index.html', flag=flag, user=user)
+    # 从数据库中查询员工数量
+    staff_num = Staff.query.count()
+    return render_template('front/front_index.html', flag=flag, user=user, staff_num=staff_num)
 
 
 # 门店信息界面接口
@@ -109,6 +113,8 @@ def schedule_s():
             example=example.replace(']','')
             example=example.split(',')
             for j in example:
+                if int(j)+1 not in id_list:
+                    continue
                 final_schedule[str(int(j)+1)][i] = 1
         change_info = getattr(schedule,'change')
         if change_info != None:
@@ -128,12 +134,13 @@ def schedule_s():
             final = {}
             for i in range(len(staff_name)):
                 final[staff_name[i]] = final_schedule[str(id_list[i])]
+        # print(final)
     # 异常处理
     except Exception as e:
-        # print(e)
+        print(e)
         final_schedule = {}
         return "error"
-    return render_template('front/front_schedulestaff.html', flag=flag, user=user, final_schedule=final,status=status)
+    return render_template('front/front_schedulestaff.html', flag=flag, user=user, final_schedule=final, status=status)
 
 #员工请求处理接口
 @front.route('/schedulesystem/staff/request', methods=['GET', 'POST'])
@@ -156,6 +163,20 @@ def staff():
     # 查询所有员工的信息
     staffs = Staff.query.all()
     return render_template('front/staff/front_staff.html', flag=flag, user=user, staffs=staffs)
+
+# 员工删除的接口
+@front.route('/schedulesystem/staff/delete', methods=['GET', 'POST'])
+def staff_delete():
+    staff_id = request.args.get('sid')
+    staff = Staff.query.filter_by(id=staff_id).first()
+    if staff.is_resign == 1:
+        db.session.delete(staff)
+        db.session.commit()
+        dbstatus.changestatus(True)
+        return redirect('/schedulesystem/staff/')
+    else:
+        return render_template('front/note/delete_note.html', staff=staff)
+
 
 #员工详情界面的接口
 @front.route('/schedulesystem/staff/detail', methods=['GET', 'POST'])
@@ -399,3 +420,84 @@ def staff_leave():
             return  redirect('/schedulesystem/schedulestaff')
 
 
+#员工换班审批
+@front.route('/schedulesystem/schedule/staff/swap', methods=['GET', 'POST'])
+def staff_swap():
+    # 判断是否登录
+    flag, user_id = if_login()
+    # 查询登陆用户信息
+    user = User.query.filter_by(id=user_id).first()
+    # GET请求，获取员工id，查询员工信息
+    if request.method == "GET":
+        staff_id = request.args.get('id')
+        staff = Staff.query.filter_by(id=staff_id).first()
+        print(staff)
+        return render_template('front/request/swap_request.html', staff=staff, flag=flag, user=user)
+    else:
+        staff_id1 = request.form.get('staffid1')
+        swapday1 = request.form.get('day1')
+        swaptim1 = request.form.get('time1')
+        staff_id2 = request.form.get('staffid2')
+        swapday2 = request.form.get('day2')
+        swaptim2 = request.form.get('time2')
+        print(staff_id1,swapday1,swaptim1,staff_id2,swapday2,swaptim2)
+        if (staff_id1 == '' or swapday1 == '' or swaptim1 == '' or staff_id2 == '' or swapday2 == '' or swaptim2 == ''):
+            return render_template('front/note/errer_swap.html')
+        else:
+            schdule = History.query.order_by(History.time.desc()).first()
+            schdule_list = []
+            for i in range(len(timelist)):
+                example = getattr(schdule, timelist[i])
+                example = example.replace('[', '')
+                example = example.replace(']', '')
+                example = example.split(',')
+                schdule_list.append(example)
+            print(schdule_list)
+            swap1Index = 3*(int(swapday1)-1) + int(swaptim1)
+            swap2Index = 3*(int(swapday2)-1) + int(swaptim2)
+            swap1 = getattr(schdule,timelist[swap1Index])
+            swap2 = getattr(schdule,timelist[swap2Index])
+            swap1 = swap1.replace('[','').replace(']','').replace(' ','').split(',')
+            swap2 = swap2.replace('[','').replace(']','').replace(' ','').split(',')
+            if str(int(staff_id1)-1) not in swap2 and str(int(staff_id2)-1) not in swap1:
+                print("ok")
+                print(swap1,swap2)
+                try:
+                    swap1.remove(str(int(staff_id1)-1))
+                    swap1.append(str(int(staff_id2)-1))
+                    swap2.remove(str(int(staff_id2)-1))
+                    swap2.append(str(int(staff_id1)-1))
+                    print(swap1,swap2)
+                    sub_swap1 = str(swap1).replace('\'','')
+                    sub_swap2 = str(swap2).replace('\'','')
+                    print(sub_swap1,sub_swap2)
+                    setattr(schdule,timelist[swap1Index],sub_swap1)
+                    setattr(schdule,timelist[swap2Index],sub_swap2)
+                    db.session.commit()
+                    return redirect('/schedulesystem/staff')
+                except Exception as e:
+                    print('add staff fail' + str(e))
+                    return render_template('front/note/errer_swap.html')
+            else:
+                print("error")
+                return render_template('front/note/errer_swap.html')
+
+# 员工离职审批
+@front.route('/schedulesystem/schedule/staff/resignation', methods=['GET', 'POST'])
+def staff_resignation():
+    # 判断是否登录
+    flag, user_id = if_login()
+    # 查询登陆用户信息
+    user = User.query.filter_by(id=user_id).first()
+    # GET请求，获取员工id，查询员工信息
+    if request.method == "GET":
+        staff_id = request.args.get('id')
+        staff = Staff.query.filter_by(id=staff_id).first()
+        print(staff)
+        return render_template('front/request/resignation_request.html', staff=staff, flag=flag, user=user)
+    else:
+        staff_id = request.form.get('staffid')
+        staff = Staff.query.filter_by(id=staff_id).first()
+        staff.is_resign = 1
+        db.session.commit()
+        return redirect('/schedulesystem/staff/')

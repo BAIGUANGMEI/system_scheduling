@@ -198,7 +198,7 @@ def main(leavestaff,leaveday,leavetime):
     return sch,new_schedule,leave_staff,change_staff,leaveday,leavetime
 
 if __name__ == '__main__':
-    sch,new_schedule,leave_staff,change_staff,leaveday,leavetime = main(12,0,1)
+    sch,new_schedule,leave_staff,change_staff,leaveday,leavetime = main(2,0,1)
     print(sch)
     print(new_schedule)
     print(leave_staff)

@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="{{ url_for('static' ,filename='css/bootstrap.css') }}">
     <style>
         .bottom:hover{
-            border-bottom: #a90404 solid 2px;
+            border-bottom: rgba(232, 0, 0, 0.72) solid 2px;
         }
     </style>
 </head>
 <body data-spy="scroll" data-target="#navbar-example2">
     <div>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #ff3c3c">
+        <nav class="navbar navbar-expand-lg navbar-light"  style="background-color:  rgba(255,0,0,0.63)">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon" ></span>
             </button>
@@ -94,9 +94,9 @@
     <script>
         $('.dropdown-toggle').dropdown()
 
-        $('#myModal').on('shown.bs.modal', function () {
-          $('#myInput').trigger('focus')
-        })
+        //$('#myModal').on('shown.bs.modal', function () {
+        //  $('#myInput').trigger('focus')
+        //})
 
 
     </script>

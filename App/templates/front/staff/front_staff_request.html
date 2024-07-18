@@ -24,10 +24,10 @@
                         <a href="{{ url_for('front.staff_leave',id=request.staff_id)}}" style="color: white">请假审批</a>
                     </button>
                     <button type="button" class="btn btn-success">
-                        调班审批
+                        <a href="{{ url_for('front.staff_swap',id=request.staff_id)}}" style="color: white">调班审批</a>
                     </button>
                     <button type="button" class="btn btn-danger">
-                        离职审批
+                        <a href="{{ url_for('front.staff_resignation',id=request.staff_id)}}" style="color: white">离职审批</a>
                     </button>
                 </div>
             </div>
